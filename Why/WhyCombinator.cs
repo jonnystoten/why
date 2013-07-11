@@ -4,29 +4,29 @@ namespace Why
 {
     public class WhyCombinator
     {
-        private static dynamic Y(Func<Func<dynamic, dynamic>, Func<dynamic, dynamic>> le)
+        private static Func<T, T> Y<T>(Func<Func<T, T>, Func<T, T>> le)
         {
-            return A(f => B(le, f));
+            return A<T>(f => B(le, f));
         }
 
-        private static dynamic A(Func<dynamic, dynamic> f)
+        private static Func<T, T> A<T>(Func<dynamic, Func<T, T>> f)
         {
             return f(f);
         }
 
-        private static dynamic B(Func<Func<dynamic, dynamic>, Func<dynamic, dynamic>> le, Func<dynamic, dynamic> f)
+        private static Func<T, T> B<T>(Func<Func<T, T>, Func<T, T>> le, Func<dynamic, Func<T, T>> f)
         {
             return le(x => C(f, x));
         }
 
-        private static dynamic C(Func<dynamic, dynamic> f, dynamic x)
+        private static T C<T>(Func<dynamic, Func<T, T>> f, T x)
         {
             return A(f)(x);
         }
 
         public int FactorialUsingY(int x)
         {
-            var factorial = Y(fac => n => n <= 2 ? n : n * fac(n - 1));
+            var factorial = Y<int>(fac => n => n <= 2 ? n : n * fac(n - 1));
             return factorial(x);
         }
     }
