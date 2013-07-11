@@ -6,8 +6,22 @@ namespace Why
     {
         private static dynamic Y(Func<Func<dynamic, dynamic>, Func<dynamic, dynamic>> le)
         {
-            Func<Func<dynamic, dynamic>, dynamic> func = f => f(f);
-            return func(f => le(x => f(f)(x)));
+            return A(f => B(le, f));
+        }
+
+        private static dynamic A(Func<dynamic, dynamic> f)
+        {
+            return f(f);
+        }
+
+        private static dynamic B(Func<Func<dynamic, dynamic>, Func<dynamic, dynamic>> le, Func<dynamic, dynamic> f)
+        {
+            return le(x => C(f, x));
+        }
+
+        private static dynamic C(Func<dynamic, dynamic> f, dynamic x)
+        {
+            return A(f)(x);
         }
 
         public int FactorialUsingY(int x)
