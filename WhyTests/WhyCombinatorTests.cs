@@ -9,9 +9,9 @@ namespace WhyTests
         [Test]
         public void Test()
         {
-            var why = new WhyCombinator();
+            var factorial = new WhyCombinator<int, int>(fac => n => n < 3 ? n : n * fac(n - 1));
 
-            Assert.That(why.FactorialUsingY(5), Is.EqualTo(120));
+            Assert.That(factorial.Execute(5), Is.EqualTo(120));
         }
     }
 }

@@ -2,32 +2,38 @@
 
 namespace Why
 {
-    public class WhyCombinator
+    public class WhyCombinator<TArg, TResult>
     {
-        private static Func<TArg, TResult> Y<TArg, TResult>(Func<Func<TArg, TResult>, Func<TArg, TResult>> le)
+        private readonly Func<TArg, TResult> actualFunc;
+
+        public WhyCombinator(Func<Func<TArg, TResult>, Func<TArg, TResult>> le)
         {
-            return A<TArg, TResult>(f => B(le, f));
+            actualFunc = Y(le);
         }
 
-        private static Func<TArg, TResult> A<TArg, TResult>(Func<dynamic, Func<TArg, TResult>> f)
+        public TResult Execute(TArg arg)
+        {
+            return actualFunc(arg);
+        }
+
+        private static Func<TArg, TResult> Y(Func<Func<TArg, TResult>, Func<TArg, TResult>> le)
+        {
+            return PassFunctionToItself(f => B(le, f));
+        }
+
+        private static Func<TArg, TResult> B(Func<Func<TArg, TResult>, Func<TArg, TResult>> le, Func<dynamic, Func<TArg, TResult>> f)
+        {
+            return le(x => GetAnswer(f, x));
+        }
+
+        private static TResult GetAnswer(Func<dynamic, Func<TArg, TResult>> f, TArg x)
+        {
+            return PassFunctionToItself(f)(x);
+        }
+
+        private static Func<TArg, TResult> PassFunctionToItself(Func<dynamic, Func<TArg, TResult>> f)
         {
             return f(f);
-        }
-
-        private static Func<TArg, TResult> B<TArg, TResult>(Func<Func<TArg, TResult>, Func<TArg, TResult>> le, Func<dynamic, Func<TArg, TResult>> f)
-        {
-            return le(x => C(f, x));
-        }
-
-        private static TResult C<TArg, TResult>(Func<dynamic, Func<TArg, TResult>> f, TArg x)
-        {
-            return A(f)(x);
-        }
-
-        public int FactorialUsingY(int x)
-        {
-            var factorial = Y<int, int>(fac => n => n <= 2 ? n : n * fac(n - 1));
-            return factorial(x);
         }
     }
 }
