@@ -18,12 +18,7 @@ namespace Why
 
         private static Func<TArg, TResult> Y(Func<Func<TArg, TResult>, Func<TArg, TResult>> le)
         {
-            return PassFunctionToItself(f => B(le, f));
-        }
-
-        private static Func<TArg, TResult> B(Func<Func<TArg, TResult>, Func<TArg, TResult>> le, Func<dynamic, Func<TArg, TResult>> f)
-        {
-            return le(x => GetAnswer(f, x));
+            return PassFunctionToItself(f => le(x => GetAnswer(f, x)));
         }
 
         private static TResult GetAnswer(Func<dynamic, Func<TArg, TResult>> f, TArg x)
